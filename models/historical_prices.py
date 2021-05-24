@@ -1,1 +1,0 @@
-#Get historical prices for all the tickers in ticker_list w.r.t USDT
