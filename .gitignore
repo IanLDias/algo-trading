@@ -1,4 +1,4 @@
-config_var
+config_var.py
 /myenv
 __pycache__
 
