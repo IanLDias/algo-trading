@@ -9,7 +9,7 @@ prices = client.get_all_tickers()
 #Looking at USDtether to crypto exchange.
 #Change to BTC as project develops
 if __name__ == '__main__':
-    with open('ticker_list.txt', 'w') as f:
+    with open('Data/ticker_list.txt', 'w') as f:
         for coin in prices:
             if 'USDT' in coin['symbol']:
                 f.write(coin['symbol'][:-4] + "\n")
