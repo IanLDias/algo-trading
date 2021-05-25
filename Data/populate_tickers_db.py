@@ -2,20 +2,17 @@ import psycopg2
 import config
 import asyncio
 import asyncio
-import logging
 import aiohttp
 from aiohttp import ClientSession
-import sys
-import pandas as pd
-import requests
+import logging
 
 params = config.config()
 conn = psycopg2.connect(**params)
 cur = conn.cursor()
 
 #Adding new symbols by importing ticker_list.txt
-df = pd.read_csv('Data/ticker_list.txt')
-current_symbols = df.values
+f = open('Data/ticker_list.txt', 'r')
+current_symbols, _ = zip(*[x.split('\n') for x in f.readlines()])
 
 async def request_pull(symbol, session:ClientSession):
     'Makes a url based on a symbol and does a get request'
@@ -32,11 +29,12 @@ async def request_pull(symbol, session:ClientSession):
 async def writing_sql(data, symbol):
     'Writes the json request data into sqlite'
     print(f"symbol: {symbol}, length: {len(data)}")
-    for index, day in enumerate(data):
-        cur.execute(f'''INSERT INTO historical_prices (id, ticker_id, date, high, low, open, close, volumeto, volumefor)
-        VALUES ('{index}','{symbol}','{day['time']}','{day['high']}','{day['low']}','
+    for day in data:
+        cur.execute(f'''INSERT INTO historical_prices (ticker_id, date, high, low, open, close, volumeto, volumefor)
+        VALUES ('{symbol}','{day['time']}','{day['high']}','{day['low']}','
         {day['open']}','{day['close']}','{day['volumeto']}','{day['volumefrom']}')''')
-        
+    conn.commit()
+
 
 async def chain(symbol):
     "Runs two processe, p1 and p2, asynchronously. Waits for one to finish before moving on"
@@ -49,8 +47,6 @@ async def chain(symbol):
         pass
 
 async def main():
-    await asyncio.gather(*(chain(symbol[0]) for symbol in current_symbols))
-    
+    await asyncio.gather(*(chain(symbol) for symbol in current_symbols))
 
 asyncio.run(main())
-conn.commit()
