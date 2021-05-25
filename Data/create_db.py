@@ -6,14 +6,18 @@ params = config()
 conn = psycopg2.connect(**params)
 cur = conn.cursor()
 
+#---------- DELETED TABLE ------------------------
 # The table 'tickers' contains all the current tickers from binance
 # The list is found in ticker_list.txt, which are trading pairs to USDT
-cur.execute("""
-    CREATE TABLE IF NOT EXISTS tickers (
-        id INTEGER PRIMARY KEY,
-        symbol TEXT NOT NULL UNIQUE,
-        name TEXT NOT NULL UNIQUE
-    )""")
+# cur.execute("""
+#     CREATE TABLE IF NOT EXISTS tickers (
+#         id INTEGER PRIMARY KEY,
+#         symbol TEXT NOT NULL UNIQUE,
+#         name TEXT NOT NULL UNIQUE
+#     )""")
+#
+#cur.execute("""DROP TABLE tickers CASCADE""")
+#-------------------------------------------------
 
 # The table historical prices lists all currently found 
 # past prices for tickers in the 'tickers' table
