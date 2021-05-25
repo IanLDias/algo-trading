@@ -6,13 +6,23 @@ import aiohttp
 from aiohttp import ClientSession
 import logging
 
+
 params = config.config()
 conn = psycopg2.connect(**params)
 cur = conn.cursor()
 
+
 #Adding new symbols by importing ticker_list.txt
 f = open('Data/ticker_list.txt', 'r')
 current_symbols, _ = zip(*[x.split('\n') for x in f.readlines()])
+
+cur.execute("""SELECT DISTINCT ticker_id FROM historical_prices""")
+symbols_in_db = cur.fetchall()
+new_symbols = []
+for i in current_symbols:
+    if i not in symbols_in_db:
+        new_symbols.append(i)
+
 
 async def request_pull(symbol, session:ClientSession):
     'Makes a url based on a symbol and does a get request'
@@ -26,6 +36,7 @@ async def request_pull(symbol, session:ClientSession):
     except:
         pass
 
+
 async def writing_sql(data, symbol):
     'Writes the json request data into sqlite'
     print(f"symbol: {symbol}, length: {len(data)}")
@@ -33,6 +44,7 @@ async def writing_sql(data, symbol):
         cur.execute(f'''INSERT INTO historical_prices (ticker_id, date, high, low, open, close, volumeto, volumefor)
         VALUES ('{symbol}','{day['time']}','{day['high']}','{day['low']}','
         {day['open']}','{day['close']}','{day['volumeto']}','{day['volumefrom']}')''')
+    #un-comment to add new data
     conn.commit()
 
 
@@ -47,6 +59,10 @@ async def chain(symbol):
         pass
 
 async def main():
-    await asyncio.gather(*(chain(symbol) for symbol in current_symbols))
+    await asyncio.gather(*(chain(symbol) for symbol in new_symbols))
 
-asyncio.run(main())
+if __name__ == '__main__':
+    print(f'Adding these new cryptocurrencies: {new_symbols}')
+    asyncio.run(main())
+    conn.commit()
+    cur.close()
