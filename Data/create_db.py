@@ -21,18 +21,18 @@ cur = conn.cursor()
 
 # The table historical prices lists all currently found 
 # past prices for tickers in the 'tickers' table
+#cur.execute("""DROP TABLE historical_prices""")
 cur.execute("""
     CREATE TABLE IF NOT EXISTS historical_prices(
         id INTEGER PRIMARY KEY,
         ticker_id TEXT NOT NULL,
         date VARCHAR(64) NOT NULL,
-        high FLOAT(10) NOT NULL,
-        low FLOAT(10) NOT NULL,
-        open FLOAT(10) NOT NULL,
-        close FLOAT(10) NOT NULL,
-        volumeto INT NOT NULL,
-        volumefor INT NOT NULL,
-        FOREIGN KEY (ticker_id) REFERENCES tickers (symbol)
+        high FLOAT(32) NOT NULL,
+        low FLOAT(32) NOT NULL,
+        open FLOAT(32) NOT NULL,
+        close FLOAT(32) NOT NULL,
+        volumeto FLOAT(32),
+        volumefor FLOAT(32)
     )
 """)
 
