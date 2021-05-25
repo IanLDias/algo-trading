@@ -4,16 +4,14 @@ from binance.enums import *
 from binance.exceptions import BinanceAPIException, BinanceOrderException
 from config_var import access_key, secret_key
 
-
 client = Client(access_key, secret_key)
-prices = client.get_all_tickers()
+
 #demo url
 #REMOVE FOR PROD
 client.API_URL = 'https://testnet.binance.vision/api'
 
-
-if __name__ == '__main__':
-    with open('Data/ticker_list.txt', 'w') as f:
-        for coin in prices:
-            if 'USDT' in coin['symbol']:
-                f.write(coin['symbol'][:-4] + "\n")
+# --- Sell an order ---
+# order = client.create_order(symbol='BTCUSDT', side='SELL',type='MARKET', quantity=1)
+# print(order)
+client = Client(access_key, secret_key)
+prices = client.get_all_tickers()
