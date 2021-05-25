@@ -6,6 +6,7 @@ import aiohttp
 from aiohttp import ClientSession
 import logging
 
+logging.basicConfig(filename='sql_input.txt')
 
 params = config.config()
 conn = psycopg2.connect(**params)
@@ -18,11 +19,13 @@ current_symbols, _ = zip(*[x.split('\n') for x in f.readlines()])
 
 cur.execute("""SELECT DISTINCT ticker_id FROM historical_prices""")
 symbols_in_db = cur.fetchall()
+symbols_in_db = [symbols[0] for symbols in symbols_in_db]
+logging.warning(f"Symbols in database: {symbols_in_db}")
 new_symbols = []
 for i in current_symbols:
     if i not in symbols_in_db:
         new_symbols.append(i)
-
+logging.warning(f"New symbols to be added: {new_symbols}")
 
 async def request_pull(symbol, session:ClientSession):
     'Makes a url based on a symbol and does a get request'
@@ -66,3 +69,4 @@ if __name__ == '__main__':
     asyncio.run(main())
     conn.commit()
     cur.close()
+    

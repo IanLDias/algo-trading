@@ -7,10 +7,6 @@ from config_var import access_key, secret_key
 
 client = Client(access_key, secret_key)
 prices = client.get_all_tickers()
-#demo url
-#REMOVE FOR PROD
-client.API_URL = 'https://testnet.binance.vision/api'
-
 
 if __name__ == '__main__':
     with open('Data/ticker_list.txt', 'w') as f:
