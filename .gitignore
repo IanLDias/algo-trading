@@ -3,3 +3,4 @@ config_var.py
 __pycache__
 ticker_list.txt
 Data/database.ini
+*/*.log

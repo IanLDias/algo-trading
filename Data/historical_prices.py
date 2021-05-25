@@ -6,7 +6,8 @@ import aiohttp
 from aiohttp import ClientSession
 import logging
 
-logging.basicConfig(filename='sql_input.txt')
+logging.basicConfig(filename='Data/sql_input.log', level=logging.INFO,
+                    format='%(levelname)s:%(message)s')
 
 params = config.config()
 conn = psycopg2.connect(**params)
@@ -20,12 +21,12 @@ current_symbols, _ = zip(*[x.split('\n') for x in f.readlines()])
 cur.execute("""SELECT DISTINCT ticker_id FROM historical_prices""")
 symbols_in_db = cur.fetchall()
 symbols_in_db = [symbols[0] for symbols in symbols_in_db]
-logging.warning(f"Symbols in database: {symbols_in_db}")
+logging.info(f"Symbols in database: {symbols_in_db}")
 new_symbols = []
 for i in current_symbols:
     if i not in symbols_in_db:
         new_symbols.append(i)
-logging.warning(f"New symbols to be added: {new_symbols}")
+logging.info(f"New symbols to be added: {new_symbols}")
 
 async def request_pull(symbol, session:ClientSession):
     'Makes a url based on a symbol and does a get request'
@@ -65,7 +66,6 @@ async def main():
     await asyncio.gather(*(chain(symbol) for symbol in new_symbols))
 
 if __name__ == '__main__':
-    print(f'Adding these new cryptocurrencies: {new_symbols}')
     asyncio.run(main())
     conn.commit()
     cur.close()
