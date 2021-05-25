@@ -2,3 +2,4 @@ config_var.py
 /myenv
 __pycache__
 ticker_list.txt
+Data/database.ini
