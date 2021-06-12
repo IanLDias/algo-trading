@@ -9,7 +9,7 @@ client = Client(access_key, secret_key)
 prices = client.get_all_tickers()
 
 if __name__ == '__main__':
-    with open('Data/ticker_list.txt', 'w') as f:
+    with open('Data/crypto/ticker_list.txt', 'w') as f:
         for coin in prices:
             if 'USDT' in coin['symbol']:
                 f.write(coin['symbol'][:-4] + "\n")

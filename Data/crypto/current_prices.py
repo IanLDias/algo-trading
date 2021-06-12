@@ -1,5 +1,9 @@
 # Run this every day to get current prices
-import config
+from pathlib import Path
+import sys
+parent = Path('.')
+sys.path.append(str(parent.resolve()))
+from Data import config
 import requests
 import psycopg2
 from datetime import datetime
