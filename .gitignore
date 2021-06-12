@@ -1,5 +1,5 @@
 config_var.py
-/myenv
+/.venv
 __pycache__
 ticker_list.txt
 Data/database.ini
