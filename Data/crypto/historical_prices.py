@@ -1,6 +1,9 @@
 import psycopg2
-import config
-import asyncio
+from pathlib import Path
+import sys
+parent = Path('.')
+sys.path.append(str(parent.resolve()))
+from Data import config
 import asyncio
 import aiohttp
 from aiohttp import ClientSession
@@ -14,8 +17,8 @@ conn = psycopg2.connect(**params)
 cur = conn.cursor()
 
 
-#Adding new symbols by importing ticker_list.txt
-f = open('Data/ticker_list.txt', 'r')
+# Adding new symbols by importing ticker_list.txt
+f = open('Data/crypto/ticker_list.txt', 'r')
 current_symbols, _ = zip(*[x.split('\n') for x in f.readlines()])
 
 cur.execute("""SELECT DISTINCT ticker_id FROM historical_prices""")

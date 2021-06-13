@@ -23,21 +23,19 @@ cur.execute("""SELECT DISTINCT date FROM historical_prices""")
 current_dates = cur.fetchall()
 current_dates = [datetime.utcfromtimestamp(int(date[0])) for date in current_dates]
 
-for i, symbol in enumerate(symbols_in_db):
-    url = f'{config.BASE_URL_COMP}data/v2/histoday?fsym={symbol}&tsym=USD&limit=1&api_key={config.API_KEY_COMP}'
-    resp = requests.get(url)
-    day = resp.json()['Data']['Data'][-1]
-    temp_date = datetime.utcfromtimestamp(day['time'])
-    if temp_date in current_dates:
-        logging.info(f"The date: {temp_date} already exists in the database")
-        break
-    else:
-        if i == 0:
-            logging.info(f"The date: {temp_date} has been added to the database")
-        cur.execute("""SELECT DISTINCT date FROM historical_prices""")
-        cur.execute(f'''INSERT INTO historical_prices (ticker_id, date, high, low, open, close, volumeto, volumefor)
-                VALUES ('{symbol}','{day['time']}','{day['high']}','{day['low']}','
-                {day['open']}','{day['close']}','{day['volumeto']}','{day['volumefrom']}')''')
-        conn.commit()
 
+for i, symbol in enumerate(symbols_in_db):
+    # Past 2 weeks of data
+    url = f'{config.BASE_URL_COMP}data/v2/histoday?fsym={symbol}&tsym=USD&limit=50&api_key={config.API_KEY_COMP}'
+    resp = requests.get(url)
+    days = resp.json()['Data']['Data']
+    for day in days:
+        if temp_date not in current_dates:
+            logging.info(f"The date: {temp_date} has been added to the database for {symbol}")
+            cur.execute("""SELECT DISTINCT date FROM historical_prices""")
+            cur.execute(f'''INSERT INTO historical_prices (ticker_id, date, high, low, open, close, volumeto, volumefor)
+                    VALUES ('{symbol}','{day['time']}','{day['high']}','{day['low']}','
+                    {day['open']}','{day['close']}','{day['volumeto']}','{day['volumefrom']}')''')
+            conn.commit()
+            
 cur.close()
