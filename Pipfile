@@ -12,6 +12,10 @@ aiohttp = "==3.7.4"
 PyYAML = "==5.4.1"
 sklearn = "*"
 pandas = "*"
+backtrader = "*"
+jupyter = "*"
+yfinance = "*"
+matplotlib = "*"
 
 [dev-packages]
 
