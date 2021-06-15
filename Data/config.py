@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+import config
 import pathlib
 
 parser = ConfigParser()
@@ -25,9 +26,9 @@ if __name__ == '__main__':
 
 #---Cryptocurrency---
 #nomics
-API_KEY_NOMICS = 'c3f2b1307b497fba9c7b97ae18e6e63d'
+API_KEY_NOMICS = config.API_KEY_NOMICS
 BASE_URL_NOMICS = 'https://api.nomics.com/v1'
 
 #cryptocompare
-API_KEY_COMP = '17666b6cf3df20d3d971212b0646e2a15447b36bf7b7a4974283778402417772'
+API_KEY_COMP = config.API_KEY_COMP
 BASE_URL_COMP = 'https://min-api.cryptocompare.com/'

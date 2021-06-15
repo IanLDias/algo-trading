@@ -16,8 +16,16 @@ backtrader = "*"
 jupyter = "*"
 yfinance = "*"
 matplotlib = "~=3.2.2"
+plotly = "*"
+ipykernel = "*"
+tensorflow-gpu = "==1.15.0"
+tensorflow = "==1.15.0"
+stable-baselines = "*"
+gym-anytrading = "*"
+gym = "*"
+tqdm = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.8"
+python_version = "3.7"
