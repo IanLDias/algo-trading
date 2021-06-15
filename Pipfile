@@ -15,7 +15,7 @@ pandas = "*"
 backtrader = "*"
 jupyter = "*"
 yfinance = "*"
-matplotlib = "*"
+matplotlib = "~=3.2.2"
 
 [dev-packages]
 
