@@ -24,6 +24,8 @@ stable-baselines = "*"
 gym-anytrading = "*"
 gym = "*"
 tqdm = "*"
+pandas-datareader = "*"
+tables = "*"
 
 [dev-packages]
 

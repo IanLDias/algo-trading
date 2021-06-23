@@ -5,3 +5,5 @@ ticker_list.txt
 Data/database.ini
 */*.log
 */config_vars.py
+**/logs/
+**/data/
