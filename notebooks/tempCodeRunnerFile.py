@@ -1,24 +1,3 @@
-import psycopg2
-from pathlib import Path 
-import sys
-import os
-from datetime import datetime
-import pandas as pd
-import re
-import numpy as np
-
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import GridSearchCV
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.svm import SVC, SVR
-
-from sklearn.metrics import accuracy_score, precision_score, f1_score, recall_score
-from sklearn.metrics import mean_squared_error as MSE, mean_absolute_error as MAE
-
-sys.path.append(str(Path(__file__).parent.parent.absolute()))
-
-from config import config 
 
 def get_data(symbols):
     "Given a list of ticker_ids, returns historical data. sep_data returns multiple "

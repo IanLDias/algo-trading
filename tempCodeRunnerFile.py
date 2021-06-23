@@ -1,0 +1,1 @@
+str(current_path)+

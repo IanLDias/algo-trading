@@ -1,11 +1,11 @@
 from configparser import ConfigParser
-import config
+import config_vars
 import pathlib
 
 parser = ConfigParser()
 current_path = pathlib.Path(__file__).parent.absolute()
 
-def config(filename=str(current_path)+'/database.ini', section='postgresql'):
+def config(filename=str(current_path)+'/Data/database.ini', section='postgresql'):
     parser = ConfigParser()
     parser.read(filename)
 
@@ -26,9 +26,9 @@ if __name__ == '__main__':
 
 #---Cryptocurrency---
 #nomics
-API_KEY_NOMICS = config.API_KEY_NOMICS
+API_KEY_NOMICS = config_vars.API_KEY_NOMICS
 BASE_URL_NOMICS = 'https://api.nomics.com/v1'
 
 #cryptocompare
-API_KEY_COMP = config.API_KEY_COMP
+API_KEY_COMP = config_vars.API_KEY_COMP
 BASE_URL_COMP = 'https://min-api.cryptocompare.com/'

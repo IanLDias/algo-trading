@@ -1,10 +1,14 @@
 import psycopg2
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.absolute()))
 from config import config
 
 params = config()
 
 conn = psycopg2.connect(**params)
 cur = conn.cursor()
+
 
 #---------- DELETED TABLE ------------------------
 # The table 'tickers' contains all the current tickers from binance
