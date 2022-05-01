@@ -1,2 +1,0 @@
-- Put all cryptocurrencies into postgres
-- Remove duplicates
