@@ -1,4 +1,4 @@
-import psycopg2
+import sqlite3
 from pathlib import Path 
 import sys
 import os
@@ -16,12 +16,15 @@ from sklearn.svm import SVC, SVR
 from sklearn.metrics import accuracy_score, precision_score, f1_score, recall_score
 from sklearn.metrics import mean_squared_error as MSE, mean_absolute_error as MAE
 
-sys.path.append(str(Path(__file__).parent.parent.absolute()))
+# sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
-from config import config 
 
-def get_data(symbols):
+# DB_PATH = os.environ.get('DB_PATH')
+# PARENT_PATH = os.path.realpath(f'./{DB_PATH}')
+def get_data(symbols, DB_PATH):
     "Given a list of ticker_ids, returns historical data. sep_data returns multiple "
+
+    "Get historical data given a list of symbols"
     if isinstance(symbols, list):
         str_list = ""
         for index, symbol in enumerate(symbols):
@@ -32,14 +35,11 @@ def get_data(symbols):
     else:
         str_list = '\'' + symbols + '\'' 
     
-    "Get historical data given a list of symbols"
-    params = config()
-    conn = psycopg2.connect(**params)
+    conn = sqlite3.connect(DB_PATH)
+    print(DB_PATH)
     cur = conn.cursor()
-    print(f'Finding data for: {str_list}')
-    cur.execute(f"""SELECT * FROM historical_prices
-    WHERE ticker_id IN ({str_list})
-    """)
+
+    cur.execute(f"""SELECT * FROM historical_prices WHERE ticker_id IN ({str_list})""")
     rows = cur.fetchall()
     return rows
 

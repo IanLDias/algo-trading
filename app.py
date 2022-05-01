@@ -1,15 +1,33 @@
-from os import access
-from binance.client import Client
-from binance.enums import *
-from binance.exceptions import BinanceAPIException, BinanceOrderException
-from config_var import access_key, secret_key
+import csv
+import os
+import sqlite3
+DB_PATH = os.environ.get("DB_PATH")
 
+# Adds symbols to the tickers table
 
-client = Client(access_key, secret_key)
-prices = client.get_all_tickers()
+def insert_data(DB_FILE, tickers):
+    conn = sqlite3.connect(DB_PATH)
+    
+    for ticker in tickers:
+        insert_ticker_data(conn, ticker)
+    conn.commit()
+    conn.close()
+
+def insert_ticker_data(conn, ticker):
+    insert_query = """INSERT INTO tickers 
+                    (symbol)
+                    values (?);"""
+    data = (ticker)
+    cur = conn.cursor()
+    cur.execute(insert_query, (data,))
+    conn.commit()
+    print(f"Added {ticker} to tickers table")
 
 if __name__ == '__main__':
-    with open('Data/crypto/ticker_list.txt', 'w') as f:
-        for coin in prices:
-            if 'USDT' in coin['symbol']:
-                f.write(coin['symbol'][:-4] + "\n")
+    with open('Data/ticker_list.csv') as f:
+        reader = csv.reader(f)
+        tickers = list(reader)
+    insert_data(DB_PATH, tickers[0])
+    
+
+
