@@ -1,0 +1,14 @@
+config_var.py
+ticker_list.txt
+Data/database.ini
+*/*.log
+*/config_vars.py
+**/logs/
+**/data/
+/algo_venv
+.ipynb_checkpoints
+__pycache__
+.envrc
+.direnv
+*.db
+*.lock
