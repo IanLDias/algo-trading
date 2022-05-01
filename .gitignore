@@ -1,5 +1,5 @@
 config_var.py
-/.venv
+/.direnv
 __pycache__
 ticker_list.txt
 Data/database.ini
@@ -7,3 +7,5 @@ Data/database.ini
 */config_vars.py
 **/logs/
 **/data/
+.ipynb_checkpoints
+*.db

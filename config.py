@@ -23,12 +23,3 @@ def config(filename=str(current_path)+'/Data/database.ini', section='postgresql'
 
 if __name__ == '__main__':
     print(config())
-
-#---Cryptocurrency---
-#nomics
-API_KEY_NOMICS = config_vars.API_KEY_NOMICS
-BASE_URL_NOMICS = 'https://api.nomics.com/v1'
-
-#cryptocompare
-API_KEY_COMP = config_vars.API_KEY_COMP
-BASE_URL_COMP = 'https://min-api.cryptocompare.com/'
