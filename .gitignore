@@ -9,3 +9,4 @@ Data/database.ini
 **/data/
 .ipynb_checkpoints
 *.db
+.envrc
