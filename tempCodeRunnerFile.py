@@ -1,1 +1,0 @@
-str(current_path)+

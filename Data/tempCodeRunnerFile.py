@@ -1,1 +1,0 @@
-rint(sys.path)
