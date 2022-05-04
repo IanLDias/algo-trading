@@ -2,9 +2,11 @@ import sqlite3
 from pathlib import Path 
 import sys
 import os
+import plotly.graph_objects as go
 from datetime import datetime
 import pandas as pd
 import re
+
 import numpy as np
 
 from sklearn.model_selection import train_test_split
@@ -21,52 +23,26 @@ from sklearn.metrics import mean_squared_error as MSE, mean_absolute_error as MA
 
 # DB_PATH = os.environ.get('DB_PATH')
 # PARENT_PATH = os.path.realpath(f'./{DB_PATH}')
-def get_data(symbols, DB_PATH):
+def get_data(symbol, currency, DB_PATH, interval='5m'):
     "Given a list of ticker_ids, returns historical data. sep_data returns multiple "
 
     "Get historical data given a list of symbols"
-    if isinstance(symbols, list):
-        str_list = ""
-        for index, symbol in enumerate(symbols):
-            if index != 0:
-                str_list += ", " + '\'' + symbol + '\'' 
-            else:
-                str_list += '\'' + symbol + '\'' 
-    else:
-        str_list = '\'' + symbols + '\'' 
-    
-    conn = sqlite3.connect(DB_PATH)
-    print(DB_PATH)
-    cur = conn.cursor()
+    conn = sqlite3.connect(os.path.realpath(f'../../{DB_PATH}'))
+    df = pd.read_sql_query(f"SELECT * FROM {symbol}{interval}{currency}", conn)
+    return df
 
-    cur.execute(f"""SELECT * FROM historical_prices WHERE ticker_id IN ({str_list})""")
-    rows = cur.fetchall()
-    return rows
-
-def convert_unix_to_datetime(date_col):
+def convert_epoch_to_datetime(df, date_col):
     'Converts the unix dates into YYYY-MM-DD'
-    int_list = list((map(int,date_col)))
-    date_list = list(map(datetime.utcfromtimestamp, int_list))
-    converted_dates = [date_list[i].strftime('%Y-%m-%d') for i in range(len(date_list))]
-    return converted_dates
+    df[date_col] = (df[date_col]/1000).apply(datetime.fromtimestamp)
+    return df
 
-def separate_symbols(df):
-    "Returns an individual df for each symbol. Sorted by alphabetical values of the symbols"
-    list_dfs = []
-    for symbol in sorted(df['symbol'].unique()):
-        current_df = df[df['symbol'] == symbol]
-        current_df = current_df.sort_values(by='date')
-        list_dfs.append(current_df)
-    return list_dfs
-
-def plot_crypto(symbol):
+def plot_crypto(symbol, df, date_column):
     'Plot the graph given a symbol name'
-    df_symbol = df[df['symbol'] == f'{symbol}']
-    fig = go.Figure(data=go.Ohlc(x=df_symbol['date'],
-                        open=df_symbol['open'],
-                        high=df_symbol['high'],
-                        low=df_symbol['low'],
-                        close=df_symbol['close']))
+    fig = go.Figure(data=go.Ohlc(x=df[date_column],
+                        open=df['open'],
+                        high=df['high'],
+                        low=df['low'],
+                        close=df['close']))
     fig.update_layout(
     title=f'{symbol} currency')
     return fig.show()

@@ -1,32 +1,14 @@
-import psycopg2
+import sqlite3
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 from config import config
 
-params = config()
+db = sqlite3.connect('historical_data.db')
+cursor = db.cursor()
 
-conn = psycopg2.connect(**params)
-cur = conn.cursor()
-
-
-#---------- DELETED TABLE ------------------------
-# The table 'tickers' contains all the current tickers from binance
-# The list is found in ticker_list.txt, which are trading pairs to USDT
-# cur.execute("""
-#     CREATE TABLE IF NOT EXISTS tickers (
-#         id INTEGER PRIMARY KEY,
-#         symbol TEXT NOT NULL UNIQUE,
-#         name TEXT NOT NULL UNIQUE
-#     )""")
-#
-#cur.execute("""DROP TABLE tickers CASCADE""")
-#-------------------------------------------------
-
-# The table historical prices lists all currently found 
-# past prices for tickers in the 'tickers' table
-cur.execute("""DROP TABLE historical_prices""")
-cur.execute("""
+cursor.execute("""DROP TABLE historical_prices""")
+cursor.execute("""
     CREATE TABLE historical_prices(
         id SERIAL PRIMARY KEY,
         ticker_id TEXT NOT NULL,
@@ -40,4 +22,5 @@ cur.execute("""
     )
 """)
 
-conn.commit()
+db.commit()
+
