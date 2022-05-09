@@ -34,6 +34,7 @@ def get_data(symbol, currency, DB_PATH, interval='5m'):
 def convert_epoch_to_datetime(df, date_col):
     'Converts the unix dates into YYYY-MM-DD'
     df[date_col] = (df[date_col]/1000).apply(datetime.fromtimestamp)
+    df = df.rename(columns={date_col:'date'})
     return df
 
 def plot_crypto(symbol, df, date_column):

@@ -1,0 +1,2 @@
+INFO:root:Downloading 765 minutes of new data available for BTC, i.e. 154 instances of 5m data.
+INFO:root:Downloading 765 minutes of new data available for ETH, i.e. 154 instances of 5m data.
